@@ -10,11 +10,10 @@
 (use Ratchet.WebSocket.WsServer)
 
 (let [reph-proc (popen "reph" "r")
-      ready (fread reph-proc 1)
-      reph-client (client.get-reph-client 10000)
+      ready (fread reph-proc 1) ; Blocks until reph has started
       server (:: IoServer
                  (factory
-                   (new HttpServer (new WsServer (new ReplApp reph-client)))
+                   (new HttpServer (new WsServer (new ReplApp)))
                    8000))
       sig-handler (lambda (signum)
                           (prn "\nShutting down Reph")

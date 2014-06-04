@@ -1,13 +1,12 @@
 (ns try-pharen)
 
 (require "vendor/autoload.php")
+(use try-pharen.client)
 (use Ratchet.MessageComponentInterface)
 (use Ratchet.ConnectionInterface)
 
 (class ReplApp [MessageComponentInterface]
        (attr reph NULL)
-       (method __construct (client)
-               (set! (this reph) client))
 
        (private-method read-reph ()
                        (socket-read (this reph) 2048 PHP_NORMAL_READ))
@@ -17,6 +16,8 @@
                          (-> conn (send prompt))))
 
        (method onOpen (^ConnectionInterface conn)
+               (set! (this reph) (client.get-reph-client 10000))
+
                (-> conn (send (this (read-reph)))) ; intro message
                (this (send-prompt conn)))
 
@@ -28,6 +29,6 @@
                (this (send-prompt from)))
 
        (method onClose (^ConnectionInterface conn)
-               )
+               (socket-close (this reph)))
        (method onError (^ConnectionInterface conn ^.Exception e)
                ))
