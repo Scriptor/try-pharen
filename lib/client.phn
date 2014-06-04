@@ -1,0 +1,6 @@
+(ns try-pharen.client)
+
+(fn get-reph-client (port)
+  (let [socket (socket-create AF_INET SOCK_STREAM SOL_TCP)]
+    (socket-connect socket "127.0.0.1" port)
+    socket))

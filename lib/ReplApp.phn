@@ -1,0 +1,33 @@
+(ns try-pharen)
+
+(require "vendor/autoload.php")
+(use Ratchet.MessageComponentInterface)
+(use Ratchet.ConnectionInterface)
+
+(class ReplApp [MessageComponentInterface]
+       (attr reph NULL)
+       (method __construct (client)
+               (set! (this reph) client))
+
+       (private-method read-reph ()
+                       (socket-read (this reph) 2048 PHP_NORMAL_READ))
+
+       (private-method send-prompt (conn)
+                       (let [prompt (. "<prompt>" (this (read-reph)))]
+                         (-> conn (send prompt))))
+
+       (method onOpen (^ConnectionInterface conn)
+               (-> conn (send (this (read-reph)))) ; intro message
+               (this (send-prompt conn)))
+
+       (method onMessage (^ConnectionInterface from msg)
+               (local newlined (. msg "\n"))
+               (socket-write (this reph) newlined (strlen newlined))
+               (local repl-output (this (read-reph)))
+               (-> from (send repl-output))
+               (this (send-prompt from)))
+
+       (method onClose (^ConnectionInterface conn)
+               )
+       (method onError (^ConnectionInterface conn ^.Exception e)
+               ))

@@ -1,0 +1,26 @@
+(declare (local TICKS 1))
+(ns try-pharen)
+
+(require "vendor/autoload.php")
+(require "lib/ReplApp.php")
+(require "lib/client.php")
+(use try-pharen.client)
+(use Ratchet.Server.IoServer)
+(use Ratchet.Http.HttpServer)
+(use Ratchet.WebSocket.WsServer)
+
+(let [reph-proc (popen "reph" "r")
+      ready (fread reph-proc 1)
+      reph-client (client.get-reph-client 10000)
+      server (:: IoServer
+                 (factory
+                   (new HttpServer (new WsServer (new ReplApp reph-client)))
+                   8000))
+      sig-handler (lambda (signum)
+                          (prn "\nShutting down Reph")
+                          (pclose reph-proc)
+                          (exit 0))]
+
+  (pcntl-signal SIGTERM sig-handler)
+  (pcntl-signal SIGINT sig-handler)
+  (-> server (run)))
