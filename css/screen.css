@@ -1,12 +1,19 @@
+h1 {
+    text-align: center;
+}
+
 #console {
     position: absolute;
-    width: 400px;
+    left: 30%;
+    width: 40%;
+    right: 30%;
     height: 500px;
-    background-color: black;
+    background-color: #DDD;
 }
 
 .jqconsole {
     padding: 10px;
+    font-size: 1.3em;
 }
 /* The cursor. */
 .jqconsole-cursor {
@@ -18,23 +25,25 @@
 }
 /* The current prompt text color */
 .jqconsole-prompt {
-    color: #0d0;
+    color: #333;
 }
 /* The command history */
 .jqconsole-old-prompt {
-    color: #0b0;
+    color: #555;
     font-weight: normal;
 }
 /* The text color when in input mode. */
 .jqconsole-input {
-    color: #dd0;
 }
 /* Previously entered input. */
 .jqconsole-old-input {
-    color: #bb0;
+    color: #777;
     font-weight: normal;
 }
 /* The text color of the output. */
 .jqconsole-output {
-    color: white;
+    display: block;
+    margin-top: 4px;
+    margin-bottom: 2px;
+    color: blue;
 }
