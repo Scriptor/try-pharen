@@ -1,0 +1,7 @@
+try_pharen.php
+phakefile.php
+*.tmp
+*.swp
+lib/*.php
+.DS_Store
+vendor/
