@@ -1,0 +1,11 @@
+{
+    "name": "scriptor/try-pharen",
+    "type": "project",
+    "description": "Browser-based repl for Pharen",
+    "kewyords": ["pharen", "repl", "browser"],
+    "license": "MIT",
+
+    "require": {
+        "cboden/Ratchet": "0.3.*"
+    }
+}
