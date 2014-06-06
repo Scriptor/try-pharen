@@ -9,26 +9,34 @@
        (attr reph NULL)
 
        (private-method read-reph ()
-                       (socket-read (this reph) 2048 PHP_NORMAL_READ))
+                       (json-decode (socket-read (this reph) 2048 PHP_NORMAL_READ) TRUE))
 
-       (private-method send-prompt (conn)
-                       (let [prompt (. "<prompt>" (this (read-reph)))]
+       (private-method send-prompt (conn p)
+                       (let [prompt (. "<prompt>" p)]
                          (-> conn (send prompt))))
+       (private-method send-result (conn result)
+                       (-> conn (send result)))
+
+       (private-method send (conn)
+                       (local output (this (read-reph)))
+                       (local type (:output :type))
+                       (cond
+                         ((=== type "prompt") (this (send-prompt conn (:output :s))))
+                         ((=== type "result") (this (send-result conn (:output :s))))))
 
        (method onOpen (^ConnectionInterface conn)
                (set! (this reph) (client.get-reph-client 10000))
 
-               (-> conn (send (this (read-reph)))) ; intro message
-               (this (send-prompt conn)))
+               (this (send conn)) ; intro message
+               (this (send conn))) ; begin prompt
 
        (method onMessage (^ConnectionInterface from msg)
                (local newlined (. msg "\n"))
                (socket-write (this reph) newlined (strlen newlined))
-               (local repl-output (this (read-reph)))
-               (-> from (send repl-output))
-               (this (send-prompt from)))
+               (this (send from)) ; Repl output
+               (this (send from))) ; prompt
 
        (method onClose (^ConnectionInterface conn)
                (socket-close (this reph)))
        (method onError (^ConnectionInterface conn ^.Exception e)
-               ))
+               (socket-close (this reph))))
