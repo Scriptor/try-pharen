@@ -8,7 +8,8 @@ h1 {
     width: 40%;
     right: 30%;
     height: 500px;
-    background-color: #DDD;
+    border: 2px solid #888;
+    border-radius: 20px;
 }
 
 .jqconsole {
@@ -30,7 +31,6 @@ h1 {
 /* The command history */
 .jqconsole-old-prompt {
     color: #555;
-    font-weight: normal;
 }
 /* The text color when in input mode. */
 .jqconsole-input {
@@ -38,7 +38,6 @@ h1 {
 /* Previously entered input. */
 .jqconsole-old-input {
     color: #777;
-    font-weight: normal;
 }
 /* The text color of the output. */
 .jqconsole-output {
