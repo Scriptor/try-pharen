@@ -9,7 +9,7 @@
 (use Ratchet.Http.HttpServer)
 (use Ratchet.WebSocket.WsServer)
 
-(let [reph-proc (popen "reph" "r")
+(let [reph-proc (popen "reph -j" "r")
       ready (fread reph-proc 1) ; Blocks until reph has started
       server (:: IoServer
                  (factory
