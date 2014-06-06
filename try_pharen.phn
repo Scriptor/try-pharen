@@ -20,6 +20,8 @@
                           (pclose reph-proc)
                           (exit 0))]
 
+  (pcntl-signal SIGHUP sig-handler)
+  (pcntl-signal SIGQUIT sig-handler)
   (pcntl-signal SIGTERM sig-handler)
   (pcntl-signal SIGINT sig-handler)
   (-> server (run)))
