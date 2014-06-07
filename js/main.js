@@ -20,5 +20,12 @@ $(function(){
         }else{
             $console.Write(event.data, 'jqconsole-output');
         }
+    };
+
+    ws.onclose = function(event){
+        if(event.code === 1006){
+            $console.Write("Failed to connect, has the try-pharen server been started?",
+                    'jqconsole-output jqconsole-error');
+        }
     }
 });

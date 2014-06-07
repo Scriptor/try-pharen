@@ -46,3 +46,6 @@ h1 {
     margin-bottom: 2px;
     color: blue;
 }
+.jqconsole-error {
+    color: red;
+}
