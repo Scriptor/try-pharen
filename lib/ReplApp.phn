@@ -9,7 +9,7 @@
        (attr reph NULL)
 
        (private-method read-reph ()
-                       (json-decode (socket-read (this reph) 2048 PHP_NORMAL_READ) TRUE))
+                       (socket-read (this reph) 2048 PHP_NORMAL_READ))
 
        (private-method send-prompt (conn p)
                        (let [prompt (. "<prompt>" p)]
@@ -18,11 +18,7 @@
                        (-> conn (send result)))
 
        (private-method send (conn)
-                       (local output (this (read-reph)))
-                       (local type (:output :type))
-                       (cond
-                         ((=== type "prompt") (this (send-prompt conn (:output :s))))
-                         ((=== type "result") (this (send-result conn (:output :s))))))
+                       (this (send-result conn (this (read-reph)))))
 
        (method onOpen (^ConnectionInterface conn)
                (set! (this reph) (client.get-reph-client 10000))

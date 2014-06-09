@@ -13,12 +13,12 @@ $(function(){
     startPrompt();
 
     ws.onmessage = function(event){
-        var data = event.data;
-        if(data.substr(0, 8) === "<prompt>"){
-            $console.SetPromptLabel(data.substr(8).trim() + " ");
+        var data = JSON.parse(event.data);
+        if(data.type === "prompt"){
+            $console.SetPromptLabel(data.s);
             $console.SetPromptText("");
         }else{
-            $console.Write(event.data, 'jqconsole-output');
+            $console.Write(data.s, 'jqconsole-output');
         }
     };
 
