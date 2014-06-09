@@ -5,3 +5,4 @@ phakefile.php
 lib/*.php
 .DS_Store
 vendor/
+*.linemap.php
