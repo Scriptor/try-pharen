@@ -1,12 +1,21 @@
 (use pharen.phake as phake)
 
-(task "build" "Compiling try-pharen Pharen files."
-      (compile-file (phake.project-path "/try_pharen.phn"))
-      (prn "Compiled " (phake.project-path "/try_pharen.phn"))
-      (phake.compile-dir
-        (phake.project-path "/lib")))
+(fn compile-main (dbg?)
+  (if dbg?
+    (phake.compile-with-flag "debug" (phake.project-path "/try_pharen.phn"))
+    (phake.compile-file (phake.project-path "/try_pharen.phn")))
+  (prn "Compiled " (phake.project-path "/try_pharen.phn")))
+
+(fn build ([dbg? FALSE])
+  (compile-main dbg?)
+  (phake.compile-dir (phake.project-path "/lib")))
 
 (task "run" "try-pharen server"
       (build)
+      (prn "Starting server...")
+      (require-once "try_pharen.php"))
+
+(task "debug" "Debug try-pharen"
+      (build TRUE)
       (prn "Starting server...")
       (require-once "try_pharen.php"))
