@@ -18,7 +18,13 @@
                        (-> conn (send result)))
 
        (private-method send (conn)
-                       (this (send-result conn (this (read-reph)))))
+                       (local result (this (read-reph)))
+                       (this (send-result conn result))
+                       result)
+
+       (private-method is-prompt (result)
+                       (local decoded (json-decode result TRUE))
+                       (=== (:decoded "type") "prompt"))
 
        (method onOpen (^ConnectionInterface conn)
                (set! (this reph) (client.get-reph-client 10000))
@@ -29,8 +35,8 @@
        (method onMessage (^ConnectionInterface from msg)
                (local newlined (. msg "\n"))
                (socket-write (this reph) newlined (strlen newlined))
-               (this (send from)) ; Repl output
-               (this (send from))) ; prompt
+               (when-not (this (is-prompt (this (send from))))
+                 (this (send from))))
 
        (method onClose (^ConnectionInterface conn)
                (socket-close (this reph)))
